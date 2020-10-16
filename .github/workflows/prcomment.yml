@@ -12,5 +12,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - name: Test action on PR comment
-        if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/foo') }}
+        if: ${{ github.event.issue.pull_request && 
+                contains(["OWNER", "MEMBER", "COLLABORATOR"], github.event.comment.author_association) &&
+                contains(github.event.comment.body, '/foo') }}
         run: echo "Event triggered!"
