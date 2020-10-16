@@ -24,6 +24,7 @@ jobs:
           regex: '^```buildkite([\s\S]*)```'
           flags: gm
       - name: Dump Regex match
+        if: ${{ toJson(steps.regex-match.outputs) }}
         env:
           REGEX_MATCH: ${{ steps.regex-match.outputs.group1 }}
         run: echo "$REGEX_MATCH"
