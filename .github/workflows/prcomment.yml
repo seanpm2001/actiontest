@@ -9,10 +9,20 @@ jobs:
             ( github.event.comment.author_association == 'OWNER' ||
               github.event.comment.author_association == 'MEMBER' ||
               github.event.comment.author_association == 'COLLABORATOR' ) &&
-            startsWith(github.event.comment.body, '/foo') }}
+            contains(github.event.comment.body, '```buildkite') }}
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+      - uses: ./.github/actions/action-regex-match-ts
+        id: regex-match
+        with:
+          text: ${{ github.event.comment.body }}
+          regex: '^```buildkite([\s\S]*)```'
+          flags: gm
+      - name: Dump Regex match
+        env:
+          REGEX_MATCH: ${{ steps.regex-match.outputs.group1 }}
+        run: echo "$REGEX_MATCH"
