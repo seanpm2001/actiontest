@@ -5,16 +5,14 @@ on:
 
 jobs:
   test-action:
+    if: ${{ github.event.issue.pull_request &&
+            ( github.event.comment.author_association == 'OWNER' ||
+              github.event.comment.author_association == 'MEMBER' ||
+              github.event.comment.author_association == 'COLLABORATOR' ) &&
+            startsWith(github.event.comment.body, '/foo') }}
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - name: Test action on PR comment
-        if: ${{ github.event.issue.pull_request &&
-          ( github.event.comment.author_association == 'OWNER' ||
-            github.event.comment.author_association == 'MEMBER' ||
-            github.event.comment.author_association == 'COLLABORATOR' ) &&
-          contains(github.event.comment.body, '/foo') }}
-        run: echo "Event triggered!"
