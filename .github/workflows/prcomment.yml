@@ -25,5 +25,13 @@ jobs:
           flags: gm
       - name: Dump Regex match
         env:
-          REGEX_MATCH: ${{ toJson(steps.regex-match.outputs.group1) }}
+          REGEX_MATCH: ${{ toJson({"PIPELINE": steps.regex-match.outputs.group1}) }}
         run: echo "$REGEX_MATCH"
+      - name: Trigger Buildkite Pipeline
+        uses: buildkite/trigger-pipeline-action@v1.2.0
+        env: 
+          PIPELINE: "clima/actiontest"
+          COMMIT: "HEAD"
+          BRANCH: "master"
+          MESSAGE: ":github: Triggered from a GitHub Action":  
+          BUILD_ENV_VARS: ${{ toJson({"PIPELINE": steps.regex-match.outputs.group1}) }}
