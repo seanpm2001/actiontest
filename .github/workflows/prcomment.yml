@@ -27,11 +27,22 @@ jobs:
         env:
           REGEX_MATCH: "{\"PIPELINE\": ${{ toJson(steps.regex-match.outputs.group1) }} }"
         run: echo "$REGEX_MATCH"
+
+      - uses: octokit/request-action@v2
+        id: getpr
+        with:
+          route: GET /repos/{repository}/pulls/{prnum}
+          repository: ${{ github.repository }}
+          prnum: ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
       - name: Trigger Buildkite Pipeline
         uses: buildkite/trigger-pipeline-action@v1.2.0
+        with:
+          secrets: ${{ secrets.BUILDKITE }}
         env: 
           PIPELINE: "clima/actiontest"
-          COMMIT: "HEAD"
-          BRANCH: "master"
+          COMMIT: ${{ steps.getpr.head.sha }}
           MESSAGE: ":github: Triggered from a GitHub Action"
           BUILD_ENV_VARS: "{\"PIPELINE\": ${{ toJson(steps.regex-match.outputs.group1) }} }"
