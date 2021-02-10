@@ -33,5 +33,5 @@ jobs:
           PIPELINE: "clima/actiontest"
           COMMIT: "HEAD"
           BRANCH: "master"
-          MESSAGE: ":github: Triggered from a GitHub Action":  
+          MESSAGE: ":github: Triggered from a GitHub Action"
           BUILD_ENV_VARS: "{\"PIPELINE\": ${{ toJson( steps.regex-match.outputs.group1}) }} }"
