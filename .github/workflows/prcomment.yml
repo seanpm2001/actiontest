@@ -28,7 +28,7 @@ jobs:
           REGEX_MATCH: "{\"PIPELINE\": ${{ toJson(steps.regex-match.outputs.group1) }} }"
         run: echo "$REGEX_MATCH"
 
-      - uses: octokit/request-action@v2
+      - uses: octokit/request-action@v2.0.2
         id: getpr
         with:
           route: GET /repos/{repository}/pulls/{prnum}
