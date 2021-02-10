@@ -31,9 +31,9 @@ jobs:
       - uses: octokit/request-action@v2.0.2
         id: getpr
         with:
-          route: GET /repos/{repository}/pulls/{prnum}
+          route: GET /repos/{repository}/pulls/{pull_number}
           repository: ${{ github.repository }}
-          prnum: ${{ github.event.issue.number }}
+          pull_number: ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
