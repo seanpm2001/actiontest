@@ -44,5 +44,5 @@ jobs:
           PIPELINE: "clima/actiontest"
           COMMIT: ${{ fromJson(steps.get_pr.outputs.data).head.sha }}
           MESSAGE: ":github: Triggered by PR comment ${{ github.event.comment.html_url }}"
-          BUILD_ENV_VARS: '{\"PIPELINE\": ${{ toJson(steps.regex-match.outputs.group1) }} }'
+          BUILD_ENV_VARS: '{"PIPELINE": ${{ toJson(steps.regex-match.outputs.group1) }} }'
           BUILDKITE_API_ACCESS_TOKEN: ${{ secrets.BUILDKITE }}
