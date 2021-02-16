@@ -44,7 +44,7 @@ jobs:
           method: POST
           payload: |
             {
-              "commit": ${{ toJson(fromJson(steps.get_pr.outputs.data).head.sha) }}             
+              "commit": ${{ toJson(fromJson(steps.get_pr.outputs.data).head.sha) }},
               "branch": "main",
               "message": "Triggered by PR comment ${{ github.event.comment.html_url }}",
               "env" : {
