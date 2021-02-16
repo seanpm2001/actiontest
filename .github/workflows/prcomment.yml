@@ -43,6 +43,13 @@ jobs:
           url: "https://api.buildkite.com/v2/organizations/clima/pipelines/actiontest/builds" 
           method: POST
           payload: |
-            {"commit": ${{ toJson(steps.regex-match.outputs.group1) }},
-             "branch": "master"}
+            {
+              "commit": ${{ toJson(fromJson(steps.get_pr.outputs.data).head.sha) }}             
+              "branch": "main",
+              "message": "Triggered by PR comment ${{ github.event.comment.html_url }}",
+              "env" : {
+                "PIPELINE" : ${{ toJson(steps.regex-match.outputs.group1) }}
+              },
+              "ignore_pipeline_branch_filters": "true"
+            }
           headers: "Authorization: Bearer ${{ secrets.BUILDKITE }}"
