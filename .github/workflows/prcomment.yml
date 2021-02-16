@@ -46,3 +46,17 @@ jobs:
           MESSAGE: ":github: Triggered by PR comment ${{ github.event.comment.html_url }}"
           BUILD_ENV_VARS: '{"PIPELINE": ${{ toJson(steps.regex-match.outputs.group1) }} }'
           BUILDKITE_API_ACCESS_TOKEN: ${{ secrets.BUILDKITE }}
+          
+        # https://stackoverflow.com/a/64627966/392585
+      - name: Read Buildkite JSON
+        id: read-json
+        run: |
+          JSON=$(cat ${HOME}/buildkitetrigger-pipeline-action.json)
+          echo "::set-output name=${JSON//'%'/'%25'}"
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: "Build created: ${{ fromJson(steps.read-json.outputs).web_url }}"
+        
