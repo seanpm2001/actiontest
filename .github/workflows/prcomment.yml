@@ -51,7 +51,7 @@ jobs:
       - name: Read Buildkite JSON
         id: read-json
         run: |
-          JSON=$(cat ${HOME}/buildkitetrigger-pipeline-action.json)
+          JSON=$(cat /github/home/buildkitetrigger-pipeline-action.json)
           echo "::set-output name=${JSON//'%'/'%25'}"
 
       - name: Create comment
