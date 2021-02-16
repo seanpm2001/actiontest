@@ -37,20 +37,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  
-      - name: Github Action for curl
-        uses: wei/curl@v1.1.1
-        with:
-          args: >
-            -H "Authorization: Bearer ${{ secrets.BUILDKITE }}" 
-            "https://api.buildkite.com/v2/organizations/clima/pipelines/actiontest/builds"
-            -X "POST"
-            -d '{
-              "commit": ${{ toJson(fromJson(steps.get_pr.outputs.data).head.sha) }},
-              "branch": "main",
-              "message": "Triggered by PR comment ${{ github.event.comment.html_url }}",
-              "env" : {
-                "PIPELINE" : ${{ toJson(steps.regex-match.outputs.group1) }}
-              },
-              "ignore_pipeline_branch_filters": "true"
-            }'
 
+      - name: Trigger Buildkite Pipeline
+        uses: buildkite/trigger-pipeline-action@v1.2.0
+        env: 
+          PIPELINE: "clima/actiontest"
+          COMMIT: ${{ fromJson(steps.get_pr.outputs.data).head.sha }}
+          MESSAGE: ":github: Triggered by PR comment ${{ github.event.comment.html_url }}"
+          BUILD_ENV_VARS: '{\"PIPELINE\": ${{ toJson(steps.regex-match.outputs.group1) }} }'
+          BUILDKITE_API_ACCESS_TOKEN: ${{ secrets.BUILDKITE }}
