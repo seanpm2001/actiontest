@@ -37,26 +37,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  
-
       - name: Trigger Buildkite Pipeline
-        uses: buildkite/trigger-pipeline-action@v1.2.0
-        env: 
-          PIPELINE: "clima/actiontest"
-          COMMIT: ${{ fromJson(steps.get_pr.outputs.data).head.sha }}
-          MESSAGE: ":github: Triggered by PR comment ${{ github.event.comment.html_url }}"
-          BUILD_ENV_VARS: '{"PIPELINE": ${{ toJson(steps.regex-match.outputs.group1) }} }'
-          BUILDKITE_API_ACCESS_TOKEN: ${{ secrets.BUILDKITE }}
-          
-        # https://stackoverflow.com/a/64627966/392585
-      - name: Read Buildkite JSON
-        id: read-json
-        run: |
-          JSON=$(cat /github/home/buildkitetrigger-pipeline-action.json)
-          echo "::set-output name=${JSON//'%'/'%25'}"
+        id: buildkite
+        uses: zegocover/buildkite-pipeline-action@master
+        with:
+          access_token: ${{ secrets.BUILDKITE }}
+          pipeline: 'clima/actiontest'
+          commit: ${{ fromJson(steps.get_pr.outputs.data).head.sha }}
+          message: ":github: Triggered by PR comment ${{ github.event.comment.html_url }}"
+          env: '{"PIPELINE": ${{ toJson(steps.regex-match.outputs.group1) }} }'
 
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
-          body: "Build created: ${{ fromJson(steps.read-json.outputs).web_url }}"
+          body: "Build created: ${{ fromJson(steps.buildkite.outputs.web_url).web_url }}"
         
