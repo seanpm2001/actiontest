@@ -39,7 +39,7 @@ jobs:
  
       - name: Trigger Buildkite Pipeline
         id: buildkite
-        uses: zegocover/buildkite-pipeline-action@master
+        uses: CliMA/buildkite-pipeline-action@master
         with:
           access_token: ${{ secrets.BUILDKITE }}
           pipeline: 'clima/actiontest'
