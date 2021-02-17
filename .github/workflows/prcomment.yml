@@ -46,6 +46,7 @@ jobs:
           commit: ${{ fromJson(steps.get_pr.outputs.data).head.sha }}
           message: ":github: Triggered by PR comment ${{ github.event.comment.html_url }}"
           env: '{"PIPELINE": ${{ toJson(steps.regex-match.outputs.group1) }} }'
+          async: true
 
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v1
