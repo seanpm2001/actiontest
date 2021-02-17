@@ -52,5 +52,5 @@ jobs:
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
-          body: "Build created: ${{ fromJson(steps.buildkite.outputs.web_url).web_url }}"
+          body: "Build created: ${{ steps.buildkite.outputs.web_url }}"
         
