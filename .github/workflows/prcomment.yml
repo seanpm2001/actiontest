@@ -44,7 +44,7 @@ jobs:
           access_token: ${{ secrets.BUILDKITE }}
           pipeline: 'clima/actiontest'
           commit: ${{ fromJson(steps.get_pr.outputs.data).head.sha }}
-          message: ":github: Triggered by PR comment ${{ github.event.comment.html_url }}"
+          message: ":github: Triggered by PR [#${{ github.event.issue.number }}](${{ github.event.comment.html_url }})"
           env: '{"PIPELINE": ${{ toJson(steps.regex-match.outputs.group1) }} }'
           async: true
 
